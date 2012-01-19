@@ -27,11 +27,16 @@ z=abs(z);
 m=max(z(:));
 z=z./m;
 
+z=im2uint8(z);
+
+%Remove noise by filtering
+z=wiener2(z,[10 10]);
+
 %Display and write the obtained message image obtained from watermark
 figure(1);
-title('Obtained message from watemarked image');
 imshow(z);
+title('Obtained message from watemarked image');
 
-imwrite(z,'msg_from_watermark.bmp','bmp');
+imwrite(z,'msg_from_watermarked.bmp','bmp');
 end
 

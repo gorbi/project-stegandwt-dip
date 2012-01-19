@@ -2,7 +2,7 @@
 
 function o=gabor_2d()
 
-la=3;
+la=6;
 t=0;
 ps=0;
 g=0.5;
