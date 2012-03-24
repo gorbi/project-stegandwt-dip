@@ -2,11 +2,11 @@
 
 function o=gabor_2d()
 
-la=6;
+la=2;
 t=0;
 ps=0;
 g=0.5;
-b=1;
+b=2;
 % N specifies the number of times the image is passed throught Gabor Filter
 % in steps of 2*pi/N
 N=8;
@@ -35,7 +35,11 @@ o=sum(o,3).^0.5;
 m=max(o(:));
 o=o./m;
 
-%Inversion
-o=ones(size(o,1), size(o,2))-o;
+%Converting image data into unint8 data
+o=o.*255;
+o=uint8(o);
+
+lvl=graythresh(o);
+o=im2bw(o,lvl);
 
 end

@@ -1,63 +1,51 @@
 function watermark()
 
-%Gain
-k=10;
-
 %Input image
 f_name=input('Enter the cover image name along with its path:','s');
-
 i1=imread(f_name);
-
-
-%i1=im2double(i1);
-[Mc Nc]=size(i1);
-
 
 %Obtaining the message image
 i2=gabor_2d();
 [Mm Nm]=size(i2);
 
-
-%Calculating the threshold
-%th=0;
-%for i=1:Mm
-%    for j=1:Nm
-%        th=th+i2(i,j);
-%    end
-%end
-%th=th/(Mm*Nm);
-
-%Converting image to binary image
-%for i=1:Mm
-%    for j=1:Nm
-%        if(i2(i,j)>th)
-%            i2(i,j)=1;
-%        else
-%            i2(i,j)=0;
-%        end
-%    end
-%end
-
-%Dividing the image into 4 image matrices of size Mm/2 X Nm/2
-%Images are P1 P2 P3 P4
-P1=i2(1:1:round(Mm./2),1:1:round(Nm./2));
-P2=i2(1:1:round(Mm./2),round(Nm./2)+1:1:Nm);
-P3=i2(round(Mm./2)+1:1:Mm,1:1:round(Nm./2));
-P4=i2(round(Mm./2)+1:1:Mm,round(Nm./2)+1:1:Nm);
-
-%Obtaining DWT co-efficients
+%Obtaining 1-level DWT co-efficients
 [cA1,cH1,cV1,cD1] = dwt2(i1,'haar');
 
+%Obtaining 2-level DWT co-efficients
+[cA2,cH2,cV2,cD2] = dwt2(cA1,'haar');
 
-%Adding message image into co-efficients with gain
-cA1=cA1+k.*P1;
-cH1=cH1+k.*P2;
-cV1=cV1+k.*P3;
-cD1=cD1+k.*P4;
+%Using LSB based watermarking to hide msg image in second LSB of co-eff
+t=conca(cH2,cV2,cD2,cH1,cV1,cD1);
+t=int32(t);
+t=double(t);
+[Mt Nt]=size(t);
+
+index=1;
+pos=1;
+bit_pos=2;
+
+while(index<=(Mm*Nm))
+
+    if(t(i)>15)
+        t(i)=bitset(t(i),b_pos,m(index));
+        index=index+1;
+    end
+    
+    i=i+1;
+    
+    if(i>(Mt*Nt))
+        i=1;
+        b_pos=b_pos+1;
+    end
+
+end
+t=int32(t);
+[H2,V2,D2,H1,V1,D1]=sepa(t);
 
 
 %Obtaing back image by using DWT co-efficients
-watermarked=idwt2(cA1,cH1,cV1,cD1,'haar',[Mc,Nc]);
+A1=idwt2(cA2,H2,V2,D2,'haar');
+watermarked=idwt2(A1,H1,V1,D1,'haar');
 
 %Converting back to uint8 from double class
 watermarked=uint8(watermarked);

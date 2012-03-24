@@ -3,40 +3,61 @@ function rm_watermark()
 %Getting watermarked image
 u=imread('watermarked.bmp');
 
-%Input cover image again
-f_name=input('Enter the cover image name along with its path:','s');
-v=imread(f_name);
+%Getting size of message image embedded in watermarked image
+Mm=input('Height of message image embedded in watermarked image');
+Nm=input('Width of message image embedded in watermarked image');
 
-%Obtaining DWT co-efficients of cover image
-[cA,cH,cV,cD]=dwt2(v,'haar');
+%Obtaining 1-level DWT co-efficients
+[cA1,cH1,cV1,cD1] = dwt2(u,'haar');
 
-%Obtaining DWT co-efficients of watermarked image
-[cA1,cH1,cV1,cD1]=dwt2(u,'haar');
+%Obtaining 2-level DWT co-efficients
+[cA2,cH2,cV2,cD2] = dwt2(cA1,'haar');
 
-%Obtaining the message image as 4 sub-sized images
-z1=cA1-cA;
-z2=cH1-cH;
-z3=cV1-cV;
-z4=cD1-cD;
+%Using LSB based watermarking to hide msg image in second LSB of co-eff
+t=conca(cH2,cV2,cD2,cH1,cV1,cD1);
+[Mt Nt]=size(t);
+t=int32(t);
+t=double(t);
 
-%Concatenation of these 4 sub-sized image to get original message image
-z=[z1 z2; z3 z4];
-z=abs(z);
+index=1;
+i=1;
+b_pos=2;
 
-%Normalising
-m=max(z(:));
-z=z./m;
+while(index<=(Mm*Nm))
 
-z=im2uint8(z);
+    if(t(i)>15)
+        o_temp(index)=bitget(t(i),b_pos);
+        index=index+1;
+    end
+    
+    i=i+1;
+    
+    if(i>(Mt*Nt))
+        i=1;
+        b_pos=b_pos+1;
+    end
+
+end
+
+in=1;
+
+for n=1:Nm
+    for m=1:Mm
+        op(m,n)=o_temp(in);
+        in=in+1;
+    end
+end
+
+op=transpose(op);
 
 %Remove noise by filtering
-z=wiener2(z,[10 10]);
+op=wiener2(op,[10 10]);
 
 %Display and write the obtained message image obtained from watermark
 figure(1);
-imshow(z);
+imshow(op);
 title('Obtained message from watemarked image');
 
-imwrite(z,'msg_from_watermarked.bmp','bmp');
+imwrite(op,'msg_from_watermarked.bmp','bmp');
 end
 
