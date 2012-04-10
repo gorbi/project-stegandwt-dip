@@ -21,13 +21,13 @@ t=double(t);
 [Mt Nt]=size(t);
 
 index=1;
-pos=1;
-bit_pos=2;
+i=1;
+b_pos=2;
 
 while(index<=(Mm*Nm))
 
     if(t(i)>15)
-        t(i)=bitset(t(i),b_pos,m(index));
+        t(i)=bitset(t(i),b_pos,i2(index));
         index=index+1;
     end
     
