@@ -22,7 +22,7 @@ function varargout = watermark_gui(varargin)
 
 % Edit the above text to modify the response to help watermark_gui
 
-% Last Modified by GUIDE v2.5 22-Apr-2012 12:35:34
+% Last Modified by GUIDE v2.5 22-Apr-2012 21:00:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -184,12 +184,16 @@ function watermark_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 fn_cvr = get(handles.path_cvr_img,'String'); 
 fn_msg = get(handles.path_msg_img,'String'); 
+a=imread(fn_cvr);
+imwrite(a,'cover_image.bmp','bmp');
+b=imread(fn_msg);
+imwrite(b,'message_image.bmp','bmp');
 tic
 watermarked = watermark(fn_cvr,fn_msg);
 time_taken = toc;
 set(handles.timing,'String',time_taken);
-
 imwrite(watermarked,'watermarked.bmp','bmp');
+ask_wm();
 
 
 % --- Executes on button press in remove_watermark.
@@ -199,8 +203,8 @@ function remove_watermark_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 fn_watermarked='watermarked.bmp';
 tic
-rm_watermark(fn_watermarked);
+msg_frm_watermark = rm_watermark(fn_watermarked);
 time_taken = toc;
 set(handles.timing,'String',time_taken);
-
-
+imwrite(msg_frm_watermark,'msg_from_watermarked.bmp','bmp');
+ask_rm();

@@ -39,4 +39,6 @@ msg_img_gabored=uint8(msg_img_gabored);
 lvl=graythresh(msg_img_gabored);
 msg_img_gabored=im2bw(msg_img_gabored,lvl);
 
+imwrite(msg_img_gabored,'gabor_filtered_msg_image.bmp','bmp');
+
 end

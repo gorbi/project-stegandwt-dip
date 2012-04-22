@@ -1,4 +1,4 @@
-function rm_watermark(fn_watermarked)
+function op = rm_watermark(fn_watermarked)
 
 u=imread(fn_watermarked);
 
@@ -41,10 +41,4 @@ for n=1:Nm
     end
 end
 
-
-figure(1);
-imshow(op);
-title('Obtained message from watemarked image');
-
-imwrite(op,'msg_from_watermarked.bmp','bmp');
 end
