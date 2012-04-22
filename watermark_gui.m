@@ -22,7 +22,7 @@ function varargout = watermark_gui(varargin)
 
 % Edit the above text to modify the response to help watermark_gui
 
-% Last Modified by GUIDE v2.5 22-Apr-2012 21:00:25
+% Last Modified by GUIDE v2.5 22-Apr-2012 22:08:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -208,3 +208,15 @@ time_taken = toc;
 set(handles.timing,'String',time_taken);
 imwrite(msg_frm_watermark,'msg_from_watermarked.bmp','bmp');
 ask_rm();
+
+
+% --- Executes on button press in reset.
+function reset_Callback(hObject, eventdata, handles)
+% hObject    handle to reset (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+delete('cover_image.bmp','message_image.bmp','watermarked.bmp','msg_from_watermarked.bmp','gabor_filtered_msg_image.bmp');
+set(handles.path_cvr_img,'String','');
+set(handles.path_msg_img,'String','');
+set(handles.timing,'String','');
+
