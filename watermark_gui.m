@@ -215,7 +215,9 @@ function reset_Callback(hObject, eventdata, handles)
 % hObject    handle to reset (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+warning off all;
 delete('cover_image.bmp','message_image.bmp','watermarked.bmp','msg_from_watermarked.bmp','gabor_filtered_msg_image.bmp');
+warning on all;
 set(handles.path_cvr_img,'String','');
 set(handles.path_msg_img,'String','');
 set(handles.timing,'String','');
