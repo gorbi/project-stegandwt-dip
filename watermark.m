@@ -1,22 +1,18 @@
-function watermark()
+function watermarked = watermark(fn_cover,fn_msg)
 
-%Input image
-f_name=input('Enter the cover image name along with its path:','s');
-i1=imread(f_name);
+a=imread(fn_cover);
 
-%Obtaining the message image
-i2=gabor_2d();
-[Mm Nm]=size(i2);
+b=gabor_2d(fn_msg);
+b=imresize(b,[128 128]);
+[Mm Nm]=size(b);
 
-%Obtaining 1-level DWT co-efficients
-[cA1,cH1,cV1,cD1] = dwt2(i1,'haar');
+[cA1,cH1,cV1,cD1] = dwt2(a,'haar');
+cA1=int32(cA1);
+cH1=int32(cH1);
+cV1=int32(cV1);
+cD1=int32(cD1);
 
-%Obtaining 2-level DWT co-efficients
-[cA2,cH2,cV2,cD2] = dwt2(cA1,'haar');
-
-%Using LSB based watermarking to hide msg image in second LSB of co-eff
-t=conca(cH2,cV2,cD2,cH1,cV1,cD1);
-t=int32(t);
+t=[cH1 cV1 cD1];
 t=double(t);
 [Mt Nt]=size(t);
 
@@ -26,8 +22,8 @@ b_pos=2;
 
 while(index<=(Mm*Nm))
 
-    if(t(i)>15)
-        t(i)=bitset(t(i),b_pos,i2(index));
+    if(t(i) >= 0)
+        t(i)=bitset(t(i),b_pos,b(index));
         index=index+1;
     end
     
@@ -39,19 +35,13 @@ while(index<=(Mm*Nm))
     end
 
 end
-t=int32(t);
-[H2,V2,D2,H1,V1,D1]=sepa(t);
 
+H1=t(:,1:(size(t,2)/3));
+V1=t(:,1+(size(t,2)/3):(2*(size(t,2)/3)));
+D1=t(:,1+(2*(size(t,2)/3)):size(t,2));
 
-%Obtaing back image by using DWT co-efficients
-A1=idwt2(cA2,H2,V2,D2,'haar');
-watermarked=idwt2(A1,H1,V1,D1,'haar');
+watermarked=idwt2(cA1,H1,V1,D1,'haar');
 
-%Converting back to uint8 from double class
 watermarked=uint8(watermarked);
 
-imwrite(watermarked,'watermarked.bmp','bmp');
-
 end
-
-
