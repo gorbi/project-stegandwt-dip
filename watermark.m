@@ -3,7 +3,7 @@ function watermarked = watermark(fn_cover,fn_msg)
 a=imread(fn_cover);
 
 b=gabor_2d(fn_msg);
-b=imresize(b,[128 128]);
+b=imresize(b,[256 256]);
 [Mm Nm]=size(b);
 
 [cA1,cH1,cV1,cD1] = dwt2(a,'haar');

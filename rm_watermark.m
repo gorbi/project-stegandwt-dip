@@ -2,8 +2,8 @@ function op = rm_watermark(fn_watermarked)
 
 u=imread(fn_watermarked);
 
-Mm=128;
-Nm=128;
+Mm=256;
+Nm=256;
 
 [cA1,cH1,cV1,cD1] = dwt2(u,'haar');
 
