@@ -125,10 +125,12 @@ function browse_c_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [filename, pathname, filterindex] = uigetfile('*.*', 'Pick a file');
-
+if (filterindex == 0)
+    set(handles.path_cvr_img,'String','');
+else
 fullfile = [pathname filename]; 
-
 set(handles.path_cvr_img,'String',fullfile);
+end
 
 
 
@@ -148,10 +150,12 @@ function browse_m_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 [filename, pathname, filterindex] = uigetfile('*.*', 'Pick a file');
-
+if (filterindex == 0)
+    set(handles.path_msg_img,'String','');
+else
 fullfile = [pathname filename]; 
-
 set(handles.path_msg_img,'String',fullfile);
+end
 
 
 
@@ -208,6 +212,7 @@ time_taken = toc;
 set(handles.timing,'String',time_taken);
 imwrite(msg_frm_watermark,'msg_from_watermarked.bmp','bmp');
 ask_rm();
+pic_match(msg_frm_watermark);
 
 
 % --- Executes on button press in reset.
