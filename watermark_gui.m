@@ -124,9 +124,10 @@ function browse_c_Callback(hObject, eventdata, handles)
 % hObject    handle to browse_c (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+path_cvr_bak = get(handles.path_cvr_img,'String');
 [filename, pathname, filterindex] = uigetfile('*.*', 'Pick a file');
 if (filterindex == 0)
-    set(handles.path_cvr_img,'String','');
+    set(handles.path_cvr_img,'String',path_cvr_bak);
 else
 fullfile = [pathname filename]; 
 set(handles.path_cvr_img,'String',fullfile);
@@ -149,9 +150,10 @@ function browse_m_Callback(hObject, eventdata, handles)
 % hObject    handle to browse_m (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+path_msg_bak = get(handles.path_msg_img,'String');
 [filename, pathname, filterindex] = uigetfile('*.*', 'Pick a file');
 if (filterindex == 0)
-    set(handles.path_msg_img,'String','');
+    set(handles.path_msg_img,'String',path_msg_bak);
 else
 fullfile = [pathname filename]; 
 set(handles.path_msg_img,'String',fullfile);
